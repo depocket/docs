@@ -17,17 +17,13 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/depocket/docs/blob/main/',
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/depocket/docs/blob/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -111,20 +107,12 @@ const config = {
             items: [
               {
                 label: 'Privacy',
-                href: 'https://depocket.com/legal/privacy',
+                href: 'https://depocket.com/privacy-policy.html',
               },
               {
                 label: 'Terms',
-                href: 'https://depocket.com/legal/terms/',
-              },
-              {
-                label: 'Data Policy',
-                href: 'https://depocket.com/legal/data-policy/',
-              },
-              {
-                label: 'Cookie Policy',
-                href: 'https://depocket.com/legal/cookie-policy/',
-              },
+                href: 'https://depocket.com/terms-and-conditions.html',
+              }
             ],
           },
         ],
