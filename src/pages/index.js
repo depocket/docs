@@ -53,8 +53,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main>
-      </main>
     </Layout>
   );
 }
