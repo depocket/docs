@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: DePocket API References
+  description: |-
+    This is DePocket API documents
+
+    Some useful links:
+    - [DePocket APP](https://app.depocket.com)
+    - [DePocket Console](https://console.depocket.io)
+
+  termsOfService: https://www.depocket.com/terms-and-conditions.html
+  contact:
+    email: contact@depocket.com
+  version: 1.0.0
+externalDocs:
+  description: Find out more about DePocket
+  url: https://depocket.com
+servers:
+  - url: https://api.depocket.io/v1
+tags:
+  - name: Token API
+    description: All data related with Token
+  - name: wallet
+    description: All data that related with blockchain wallet
+  - name: blockchain
+    description: All data related with blockchain data. Such as block, transaction, logs
+paths:
+  /token/{address}:
+    get:
+      tags:
+        - Token API
+      summary: Get token detail
+      description: Get token detail
+      operationId: getTokenDetail
+      parameters:
+        - name: address
+          in: path
+          description: Contract address of the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Get token detail success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+components:
+  schemas:
+    Token:
+      type: object
+      properties:
+        name:
+          type: string
+          format: string
+          example: Ethereum
+        symbol:
+          type: string
+          format: string
+          example: ETH
+        decimals:
+          type: integer
+          format: int64
+          example: 18
+        address:
+          type: string
+          format: string
+          example: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+        price:
+          type: number
+          format: float64
+          example: 1800.0
+        icon_url:
+          type: string
+          format: string
+          example: https://cdn.depocket.com/chains/ethereum/ethereum.png
+        chain:
+          type: string
+          format: string
+          example: bsc
+  securitySchemes:
+    api_key:
+      description: >
+        Please use your api key to test API
+      type: http
+      scheme: bearer
+      in: header

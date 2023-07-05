@@ -18,13 +18,16 @@
     "format:diff": "prettier --config .prettierrc --list-different \"**/*.{js,jsx,ts,tsx,md,mdx}\""
   },
   "dependencies": {
-    "@docusaurus/core": "2.1.0",
+    "@docusaurus/core": "2.4.1",
     "@docusaurus/plugin-content-docs": "^2.2.0",
-    "@docusaurus/preset-classic": "2.1.0",
+    "@docusaurus/preset-classic": "2.4.1",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
+    "docusaurus-preset-openapi": "^0.6.4",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "update-browserslist-db": "^1.0.11",
+    "url": "^0.11.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.2",

@@ -12,26 +12,26 @@ const config = {
 
   presets: [
     [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      "docusaurus-preset-openapi",
+      /** @type {import('docusaurus-preset-openapi').Options} */
+      {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/depocket/docs/blob/main/',
+            'https://github.com/depocket/docs/blob/main/docs'
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/depocket/docs/blob/main/',
+            'https://github.com/depocket/docs/blob/main/blog',
         },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      }),
+        api: {
+          path: 'openapi/spec.yml',
+          routeBasePath: '/api',
+        }
+      },
     ],
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -48,6 +48,7 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
+          {to: 'api', label: 'API References', position: 'left'},
           {to: 'faqs', label: 'FAQs', position: 'left'},
           {to: 'blog', label: 'Blog', position: 'left'},
           // Please keep GitHub link to the right for consistency.
