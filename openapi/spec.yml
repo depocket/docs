@@ -20,12 +20,12 @@ servers:
 tags:
   - name: Token API
     description: All data related with Token
-  - name: wallet
+  - name: Wallet API
     description: All data that related with blockchain wallet
-  - name: blockchain
+  - name: Blockchain API
     description: All data related with blockchain data. Such as block, transaction, logs
 paths:
-  /token/{address}:
+  /tokens/{address}:
     get:
       tags:
         - Token API
@@ -53,10 +53,151 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Token'
+                $ref: '#/components/schemas/TokenResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Token'
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+  /tokens/{address}/holders:
+    get:
+      tags:
+        - Token API
+      summary: Get token's holders
+      description: Get all token holders
+      operationId: getTokenHolders
+      parameters:
+        - name: address
+          in: path
+          description: Contract address of the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: limit
+          in: query
+          description: Total results per request. Default is 100 per request and max 1000 per request
+          required: false
+          schema:
+            type: number
+            format: int64
+        - name: page
+          in: query
+          description: The page number of the results. Default is 1
+          required: false
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: When the API is successful, it will return a list of holder's address as a string array.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenHoldersResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TokenHoldersResponse'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+  /tokens/{address}/price:
+    get:
+      tags:
+        - Token API
+      summary: Get token's price
+      description: Get the realtime value of the token's price in usd
+      operationId: getTokenPrice
+      parameters:
+        - name: address
+          in: path
+          description: Contract address of the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: When the API is successful, it will return the price of the token in usd.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPriceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TokenPriceResponse'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+  /wallet/{wallet_address}/token/{token_address}/balances:
+    get:
+      tags:
+        - Wallet API
+      summary: Get token balance for wallet
+      description: Get token detail
+      operationId: getTokenDetail
+      parameters:
+        - name: wallet_address
+          in: path
+          description: Blockchain address of the wallet
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: token_address
+          in: path
+          description: Contract address of the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: When the API call was success, it will return the map of token address and balance of the token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBalanceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/WalletBalanceResponse'
         '400':
           description: Invalid contract's address for token
         '404':
@@ -67,37 +208,103 @@ paths:
         - api_key: []
 components:
   schemas:
-    Token:
+    TokenResponse:
       type: object
       properties:
-        name:
-          type: string
-          format: string
-          example: Ethereum
-        symbol:
-          type: string
-          format: string
-          example: ETH
-        decimals:
-          type: integer
-          format: int64
-          example: 18
-        address:
-          type: string
-          format: string
-          example: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
-        price:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+              format: string
+              example: Ethereum
+            symbol:
+              type: string
+              format: string
+              example: ETH
+            decimals:
+              type: integer
+              format: int64
+              example: 18
+            address:
+              type: string
+              format: string
+              example: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+            price:
+              type: number
+              format: float64
+              example: 1800.0
+            icon_url:
+              type: string
+              format: string
+              example: https://cdn.depocket.com/chains/ethereum/ethereum.png
+            chain:
+              type: string
+              format: string
+              example: bsc
+        error_code:
           type: number
-          format: float64
-          example: 1800.0
-        icon_url:
+          format: int64
+          example: 0
+        error_message:
           type: string
           format: string
-          example: https://cdn.depocket.com/chains/ethereum/ethereum.png
-        chain:
+          example: 'token does not exist'
+    TokenHoldersResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+        page:
+          type: number
+          format: int64
+          example: 1
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
           type: string
           format: string
-          example: bsc
+          example: 'token does not exist'
+    TokenPriceResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            price:
+              type: number
+              format: float64
+              example: 18.1
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
+          type: string
+          format: string
+          example: 'token does not exist'
+    WalletBalanceResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            balance:
+              type: number
+              format: int64
+              example: 1000
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
+          type: string
+          format: string
+          example: 'token does not exist'
   securitySchemes:
     api_key:
       description: >
