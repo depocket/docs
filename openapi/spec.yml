@@ -159,13 +159,107 @@ paths:
           description: Validation exception
       security:
         - api_key: []
+  /tokens/{address}/history_prices:
+    get:
+      tags:
+        - Token API
+      summary: Get token's price in history
+      description: Get the token's price in the past
+      operationId: getTokenHistoryPrices
+      parameters:
+        - name: address
+          in: path
+          description: Contract address of the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: start_date
+          in: query
+          description: Start date when you need to get price, in timestamp format
+          required: true
+          schema:
+            type: number
+            format: timestamp
+        - name: end_date
+          in: query
+          description: Start date when you need to get price, in timestamp format
+          required: true
+          schema:
+            type: number
+            format: timestamp
+      responses:
+        '200':
+          description: When the API is successful, it will return the maps that mapping timestamp to the price of the token in usd.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenHistoryPriceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TokenHistoryPriceResponse'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+  /wallet/{wallet_address}/balances:
+    get:
+      tags:
+        - Wallet API
+      summary: Get portfolio balance for wallet
+      description: Get token detail
+      operationId: getPortfolioBalances
+      parameters:
+        - name: wallet_address
+          in: path
+          description: Blockchain address of the wallet
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: When the API call was success, it will return the map of token address and balance of the tokens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBalancesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/WalletBalancesResponse'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
   /wallet/{wallet_address}/token/{token_address}/balances:
     get:
       tags:
         - Wallet API
       summary: Get token balance for wallet
       description: Get token detail
-      operationId: getTokenDetail
+      operationId: getTokenBalanceForWallet
       parameters:
         - name: wallet_address
           in: path
@@ -202,6 +296,93 @@ paths:
           description: Invalid contract's address for token
         '404':
           description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+  /wallet/{wallet_address}/token/{token_address}/history_balances:
+    get:
+      tags:
+        - Wallet API
+      summary: Get token balance in history for a wallet
+      description: Get token balance in history for any wallet based on block number
+      operationId: getTokenHistoryBalances
+      parameters:
+        - name: wallet_address
+          in: path
+          description: Blockchain address of the wallet
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: token_address
+          in: path
+          description: Contract address of the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: chain
+          in: query
+          description: Chain code for the token
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: block_number
+          in: query
+          description: Block number that need to get the history balance
+          required: true
+          schema:
+            type: number
+            format: uint64
+      responses:
+        '200':
+          description: When the API call was success, it will return the token balance at given block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletHistoryBalanceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/WalletHistoryBalanceResponse'
+        '400':
+          description: Invalid contract's address for token
+        '404':
+          description: Token not found
+        '405':
+          description: Validation exception
+      security:
+        - api_key: []
+  /blockchain/blocks/{number}:
+    get:
+      tags:
+        - Blockchain API
+      summary: Get block's data by number
+      description: Given block number for a chain and get it's full data
+      operationId: getBlockByNumber
+      parameters:
+        - name: chain
+          in: query
+          description: Chain code for the block
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: When the API call was success, it will return full data for any block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockchainBlock'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BlockchainBlock'
+        '400':
+          description: Invalid block number
+        '404':
+          description: Block not found
         '405':
           description: Validation exception
       security:
@@ -287,7 +468,52 @@ components:
           type: string
           format: string
           example: 'token does not exist'
+    TokenHistoryPriceResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: map
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
+          type: string
+          format: string
+          example: 'token does not exist'
     WalletBalanceResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: map
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
+          type: string
+          format: string
+          example: 'token does not exist'
+    WalletBalancesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: map
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
+          type: string
+          format: string
+          example: 'token does not exist'
+    WalletHistoryBalanceResponse:
       type: object
       properties:
         data:
@@ -297,6 +523,75 @@ components:
               type: number
               format: int64
               example: 1000
+            block_number:
+              type: number
+              format: int64
+              example: 200
+        error_code:
+          type: number
+          format: int64
+          example: 0
+        error_message:
+          type: string
+          format: string
+          example: 'token does not exist'
+    BlockchainBlock:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            hash:
+              type: string
+              format: string
+              example: 0x0000....001
+            parent_hash:
+              type: string
+              format: string
+              example: 0x0000....000
+            uncle_hash:
+              type: string
+              format: string
+              example: 0x0000....000
+            root:
+              type: string
+              format: string
+              example: 0x0000....000
+            tx_hash:
+              type: string
+              format: string
+              example: 0x0000....000
+            receipt_hash:
+              type: string
+              format: string
+              example: 0x0000....000
+            number:
+              type: integer
+              format: int64
+              example: 18
+            difficulty:
+              type: number
+              format: number
+              example: 1
+            gas_limit:
+              type: number
+              format: number
+              example: 1
+            gas_used:
+              type: number
+              format: number
+              example: 1
+            time:
+              type: number
+              format: timestamp
+              example: 16989232
+            extra:
+              type: array
+              format: bytearray
+            nonce:
+              type: integer
+              format: int64
+              example: 1
         error_code:
           type: number
           format: int64
