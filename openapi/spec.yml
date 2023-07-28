@@ -16,7 +16,7 @@ externalDocs:
   description: Find out more about DePocket
   url: https://depocket.com
 servers:
-  - url: https://api.depocket.io/v1
+  - url: https://api.depocket.io/api/v1
 tags:
   - name: Token API
     description: All data related with Token

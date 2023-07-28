@@ -48,6 +48,7 @@ DePocket also has other utilities as follows to make it the most convenient for 
 
 * Select currency
 * Dark mode
-* Change language
+* Multiple language
+* Multiple chain supported
 * Search for specific address
 
