@@ -213,7 +213,7 @@ paths:
           description: Validation exception
       security:
         - api_key: []
-  /wallet/{wallet_address}/portfolio:
+  /wallets/{wallet_address}/portfolio:
     get:
       tags:
         - Wallet API
@@ -253,7 +253,7 @@ paths:
           description: Validation exception
       security:
         - api_key: []
-  /wallet/{wallet_address}/token/{token_address}/balance:
+  /wallets/{wallet_address}/token/{token_address}/balance:
     get:
       tags:
         - Wallet API
@@ -300,7 +300,7 @@ paths:
           description: Validation exception
       security:
         - api_key: []
-  /wallet/{wallet_address}/token/{token_address}/history_balances:
+  /wallets/{wallet_address}/token/{token_address}/history_balances:
     get:
       tags:
         - Wallet API
